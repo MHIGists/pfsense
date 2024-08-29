@@ -414,7 +414,7 @@ if (isset($_REQUEST['add']) && isset($_REQUEST['if_add'])) {
 			}
 
 			init_config_arr(['nat', 'rule']);
-		
+
 			foreach ($config['nat']['rule'] as $x => $rule) {
 				if ($rule['interface'] == $id) {
 					config_del_path("nat/rule/{$x}/interface");
@@ -508,6 +508,15 @@ $portselect='';
 foreach ($portlist as $portname => $portinfo) {
 	$portselect.='<option value="'.$portname.'"';
 	$portselect.=">".$ifdescrs[$portname]."</option>\n";
+}
+
+$user_settings = get_user_settings($_SESSION['Username']);
+$interfaces = config_get_path('interfaces', []);
+print_r($interfaces);
+
+// Adhere to interface sort in user settings, if applicable
+if  ($user_settings['webgui']['interfacessort']){
+	$interfaces = msort($interfaces, 0);
 }
 
 ?>
