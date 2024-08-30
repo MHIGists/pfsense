@@ -514,6 +514,7 @@ $user_settings = get_user_settings($_SESSION['Username']);
 // Adhere to interface sort in user settings, if applicable
 if  ($user_settings['webgui']['interfacessort']){
 	$interfaces = config_get_path('interfaces', []);
+	print_r($interfaces);
 	$interfaces = sort_interface_list($interfaces);
 }
 print_r($interfaces);
