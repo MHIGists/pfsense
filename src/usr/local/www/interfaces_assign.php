@@ -511,16 +511,13 @@ foreach ($portlist as $portname => $portinfo) {
 }
 
 $user_settings = get_user_settings($_SESSION['Username']);
-$interfaces = config_get_path('interfaces', []);
-print_r($interfaces);
-
 // Adhere to interface sort in user settings, if applicable
 if  ($user_settings['webgui']['interfacessort']){
-	$interfaces = msort($interfaces, 0);
+	$interfaces = config_get_path('interfaces', []);
+	$interfaces = sort_interface_list($interfaces);
 }
 print_r($interfaces);
 
-print_r(msort($interfaces, 'descr'))
 ?>
 <form action="interfaces_assign.php" method="post">
 	<div class="table-responsive">
@@ -535,7 +532,7 @@ print_r(msort($interfaces, 'descr'))
 	<tbody>
 <?php
 	$i=0;
-	foreach ($config['interfaces'] as $ifname => $iface):
+	foreach ($interfaces as $ifname => $iface):
 		if ($iface['descr']) {
 			$ifdescr = $iface['descr'];
 		} else {

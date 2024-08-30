@@ -920,9 +920,9 @@ function is_v6($ip_or_subnet) {
 
 /**
  * Checks if an IPv6 address is a Global Unicast Address (GUA).
- * 
+ *
  * @param string $ip_or_subnet IPv6 address or subnet
- * 
+ *
  * @return bool
  */
 function is_v6gua(string $ip_or_subnet): bool {
@@ -1890,7 +1890,23 @@ function get_interface_list($mode = "active", $keyby = "physical", $vfaces = fal
 	}
 	return $iflist;
 }
+function sort_interface_list($interface_array)
+{
+	// Sort the main array by key
+	ksort($interface_array, SORT_NATURAL | SORT_FLAG_CASE);
 
+	// Iterate through each sub-array
+	foreach ($interface_array as &$subArray) {
+		// Check if 'descr' exists in the sub-array
+		if (is_array($subArray) && array_key_exists('descr', $subArray)) {
+			// If 'descr' exists, sort by it
+			usort($interface_array, function($a, $b) {
+				return strnatcasecmp($a['descr'], $b['descr']);
+			});
+		}
+	}
+	return $interface_array;
+}
 function get_lagg_interface_list() {
 	global $config;
 
@@ -2890,10 +2906,10 @@ function route_table() {
 /**
  * Checks if a route was sourced from a dynamic routing protocol like
  * BGP or OSPF by looking at the route flags.
- * 
+ *
  * @param string $target IP address or subnet, or 'default' for the default route
  * @param string $ipprotocol either 'inet' for IPv4, or 'inet6' for IPv6
- * 
+ *
  * @return bool true if it's a dynamic route
  */
 function is_dynamic_route(string $target, string $ipprotocol = ''): bool {
@@ -4288,7 +4304,7 @@ function get_specialnet(?string $net = '', array $flags = [], ?string $if = ''):
 						$len = $end - $start;
 						for ($i = 0; $i <= $len; $i++) {
 							$snip = ip2long32($start+$i);
-			
+
 							$specialnet[$snip] = $snip . ' (' . $sn['descr'] . ')';
 						}
 					} else {
