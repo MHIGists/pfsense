@@ -518,6 +518,7 @@ print_r($interfaces);
 if  ($user_settings['webgui']['interfacessort']){
 	$interfaces = msort($interfaces, 0);
 }
+print_r($interfaces);
 
 ?>
 <form action="interfaces_assign.php" method="post">
