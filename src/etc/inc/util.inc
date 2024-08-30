@@ -1890,21 +1890,29 @@ function get_interface_list($mode = "active", $keyby = "physical", $vfaces = fal
 	}
 	return $iflist;
 }
-function sort_interface_list($interface_array)
-{
+function sort_interface_list($interface_array) {
 	// Sort the main array by key
 	ksort($interface_array, SORT_NATURAL | SORT_FLAG_CASE);
+	$interfaces_with_descr = [];
 
-	// Iterate through each sub-array
-	foreach ($interface_array as &$subArray) {
+	foreach ($interface_array as $key => &$subArray) {
 		// Check if 'descr' exists in the sub-array
 		if (is_array($subArray) && array_key_exists('descr', $subArray)) {
-			// If 'descr' exists, sort by it
-			usort($interface_array, function($a, $b) {
-				return strnatcasecmp($a['descr'], $b['descr']);
-			});
+			// Add to the 'interfaces_with_descr' array for later sorting
+			$interfaces_with_descr[$key] = $subArray;
 		}
 	}
+
+	// Sort the interfaces with 'descr' by the 'descr' value
+	uasort($interfaces_with_descr, function($a, $b) {
+		return strnatcasecmp($a['descr'], $b['descr']);
+	});
+
+	// Merge sorted interfaces with the original array
+	foreach ($interfaces_with_descr as $key => $subArray) {
+		$interface_array[$key] = $subArray;
+	}
+
 	return $interface_array;
 }
 function get_lagg_interface_list() {
