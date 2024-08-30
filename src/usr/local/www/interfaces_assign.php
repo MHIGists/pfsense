@@ -520,6 +520,7 @@ if  ($user_settings['webgui']['interfacessort']){
 }
 print_r($interfaces);
 
+print_r(msort($interfaces, 'descr'))
 ?>
 <form action="interfaces_assign.php" method="post">
 	<div class="table-responsive">
